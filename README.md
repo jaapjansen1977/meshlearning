@@ -6,6 +6,13 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
+## Geometrische schouderreferentie
+
+**[Bekijk de zelfstandige referentie en onafhankelijke controles](docs/shoulder-reference/README.md).**
+Landmarkframes, expliciete YXY-definitie, 160°-heffingen en gecombineerde standen,
+zonder geleerde kalibratie. Ook toegepast op de bestaande pitch. De registratie
+van echte SOMA-uitvoer blijft een afzonderlijke stap.
+
 ## Diagnose van de schouderkalibratie
 
 **[Bekijk de aangetoonde bereikbegrenzing en de afzonderlijke framekwestie](docs/shoulder-diagnosis/README.md).**

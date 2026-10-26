@@ -1,5 +1,9 @@
 # Hoekdefinities en anatomische status
 
+**Nieuw: [de geometrische thorax–humerusreferentie](shoulder-reference/README.md)
+legt landmarkframes, YXY-hoeken, links/rechts en singulariteiten expliciet vast.
+De engineering-controls hieronder blijven een afzonderlijke, oudere definitie.**
+
 ## Vastgelegd in engineering-axes-v2
 
 - Rechtshandig assenstelsel, actieve rotaties op kolomvectoren.
@@ -68,4 +72,7 @@ moeten expliciet gekoppeld worden aan een gecontroleerde skeleton-/framemapping.
 De volgende integratiecontrole vergelijkt onafhankelijke anatomische labels met
 Movalytics-uitvoer uit exacte segmentrotaties, gevolgd door dezelfde vergelijking
 met door GEM-X geschatte rotaties. Dat houdt fouten in hoekextractie en in
-beeldschatting gescheiden. Deze twee integratiecontroles zijn nog niet uitgevoerd.
+beeldschatting gescheiden. De exacte-rotatiecontrole is inmiddels uitgevoerd: zie [de diagnose](shoulder-diagnosis/README.md).
+De nieuwe [model-landmarkreferentie](shoulder-reference/README.md) gebruikt geen
+geleerde kalibratie. Anatomische SOMA-registratie en GEM-X-beeldschatting blijven
+afzonderlijk te controleren.

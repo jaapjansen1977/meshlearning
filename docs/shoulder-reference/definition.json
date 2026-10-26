@@ -1,0 +1,43 @@
+{
+  "version": "thorax-humerus-landmark-yxy-v1",
+  "joint": "thorax-humerus (humerothoracic); not isolated glenohumeral",
+  "rotation_convention": "active column vectors; anatomical axes are columns of R_world",
+  "axes": {
+    "X": "anterior",
+    "Y_thorax": "superior",
+    "Y_humerus": "elbow midpoint to GH (proximal)",
+    "Z": "subject right"
+  },
+  "thorax_landmarks": {
+    "Y": "mid(IJ,C7)-mid(PX,T8)",
+    "Z_seed": "cross(C7-IJ, mid(PX,T8)-IJ), rightward",
+    "X": "Y cross Z; orthonormalized"
+  },
+  "humerus_landmarks": {
+    "origin": "GH",
+    "Y": "GH-mid(EL,EM)",
+    "X": "normal to GH/EL/EM plane, anterior; left cross-order reversed",
+    "Z": "X cross Y, subject right"
+  },
+  "relative_rotation": "R_thorax_world.T @ R_humerus_world",
+  "registration_rule": "Technical frames require explicit anatomy-in-segment matrices B; R_anatomy=R_segment@B. No identity fallback and no fitted offset.",
+  "right_intrinsic_yxy": "R=Ry(plane) Rx(-elevation) Ry(axial_yxy)",
+  "left_raw_intrinsic_yxy": "R=Ry(-plane) Rx(+elevation) Ry(-axial_yxy); side-normalized reported values match mirrored right movement",
+  "plane_zero": "frontal outward arm elevation",
+  "plane_plus_90": "anterior arm elevation",
+  "axial_yxy_positive": "internal direction, bilateral normalized convention",
+  "neutral": "Anatomical frames aligned, arm down; YXY plane and third angle individually nonunique",
+  "elevation_range_deg": [
+    0,
+    180
+  ],
+  "wrapped_angles_deg": "[-180,180)",
+  "singularities": "At 0 and 180 degrees plane and YXY axial are None. At 0 minimal-swing twist remains identifiable; at 180 it is None.",
+  "geometric_swing_components": "frontal=elevation*cos(plane), sagittal=elevation*sin(plane); supplementary, not independent ISB Euler flexion/abduction angles",
+  "minimal_swing_twist": "Residual long-axis rotation after shortest swing from neutral; equals wrap(plane+axial_yxy) away from poles; supplementary, not the third ISB Euler coordinate",
+  "near_singularity": "Within 2 degrees of either pole, warning flag; not automatically forced to zero",
+  "calibration": "none",
+  "filter": "none",
+  "primary_reference_doi": "10.1016/j.jbiomech.2004.05.042",
+  "status": "Explicit model convention, independently verified numerically; not validation of real anatomy or unknown SOMA frames"
+}

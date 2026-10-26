@@ -67,3 +67,13 @@ De slanke en vollere variant zijn eigen parametrische vervormingen van onze
 oorspronkelijke procedurele mesh. Geen externe lichaamsmodellen, demografische
 scans, texturen of nieuwe afhankelijkheden zijn toegevoegd. Het zijn geen
 gevalideerde leeftijds- of BMI-modellen; het skelet en de pitch blijven gelijk.
+
+## Geometrische schouderreferentie
+
+De landmarkframes, expliciete YXY-conventie en controles zijn in dit project
+geïmplementeerd. Er wordt geen kalibratie geleerd of aangepast. De zelfstandige
+referentie heeft alleen NumPy nodig; de onafhankelijke verificatie gebruikt SciPy
+(BSD). Wu et al. (2005) wordt geciteerd; Spartacus is alleen als publieke
+conventie-kruiscontrole gelezen, zonder code of datasets over te nemen.
+Alle gepubliceerde controlelandmarks, rotaties en pitchlabels zijn gegenereerde
+modeldata. Dit is geen validatie van gemeten anatomie of SOMA-registratie.
