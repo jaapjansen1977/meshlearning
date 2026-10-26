@@ -21,3 +21,18 @@ Voor elke later toegevoegde asset: bron-URL, exacte versie/hash, licentietekst,
 recht op commerciële training, verkoop van gegenereerde data, redistributie van
 het bronasset en attribution-verplichtingen vastleggen. Deze rechten zijn
 verschillende vragen; toestemming voor één impliceert de andere niet.
+
+## Ontworpen pitch v1
+
+De beweging in `configs/pitch_v1.json` is opgebouwd uit eigen numerieke keyframes;
+er is geen externe mocap, sportvideo of gedownloade animatie gebruikt. De
+licentie op een bestaande bewegingsdataset is daardoor geen afhankelijkheid.
+De door `scripts/render_pitch.py` gemaakte mesh, rig, materiaalinstellingen,
+markeringen en balmarker zijn origineel procedureel. Er worden geen externe
+mensmodellen, huidtexturen, foto's, add-ons of auteursrechtelijke meshbestanden
+ingeladen. Dat is geen anatomische of juridische certificering van het project.
+
+De reviewtools gebruiken Pillow en Matplotlib, met hun eigen licenties;
+er worden geen distributiebinaries of fontbestanden meegeleverd.
+Brondata en ontwerpkeuzes staan expliciet in de review. Het is geen gemeten
+beweging van een echte persoon en geen digitale kopie van een specifieke pitcher.

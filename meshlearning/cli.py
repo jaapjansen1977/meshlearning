@@ -39,7 +39,19 @@ def main():
     motion_parser.add_argument("--case", default="thigh_L.z")
     motion_parser.add_argument("--frames", type=int, default=48)
     motion_parser.add_argument("--fps", type=int, default=24)
+    pitch_parser = sub.add_parser(
+        "pitch", help="Generate an original designed full-body pitch"
+    )
+    pitch_parser.add_argument(
+        "--config", type=Path, default=Path("configs/pitch_v1.json")
+    )
+    pitch_parser.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
+    if a.command == "pitch":
+        from .pitch import generate as generate_pitch
+
+        print(json.dumps(generate_pitch(a.config, a.out), indent=2))
+        return
     if a.command == "controls":
         from .controls import write_package
 
