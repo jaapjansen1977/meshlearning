@@ -46,7 +46,19 @@ def main():
         "--config", type=Path, default=Path("configs/pitch_v2.json")
     )
     pitch_parser.add_argument("--out", type=Path, required=True)
+    football_parser = sub.add_parser(
+        "football-kick", help="Generate an original right-foot kick"
+    )
+    football_parser.add_argument(
+        "--config", type=Path, default=Path("configs/football_kick_v1.json")
+    )
+    football_parser.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
+    if a.command == "football-kick":
+        from .football import generate as generate_football
+
+        print(json.dumps(generate_football(a.config, a.out), indent=2))
+        return
     if a.command == "pitch":
         from .pitch import generate as generate_pitch
 

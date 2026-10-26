@@ -6,6 +6,12 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
+## Nieuwe beweging: voetbaltrap
+
+**[Bekijk de voetbaltrap met drie lichaamsvormen](docs/football-kick/README.md).**
+Een eigen trap vanuit stand, met achterzwaai, balmarkering en doorzwaai.
+Vergelijkingen van voren en opzij, losse 30-fps-video’s en exacte modelrotaties.
+
 ## Geometrische schouderreferentie
 
 **[Bekijk de zelfstandige referentie en onafhankelijke controles](docs/shoulder-reference/README.md).**

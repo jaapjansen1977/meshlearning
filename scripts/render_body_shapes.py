@@ -1,7 +1,8 @@
 """Reuse an original baseline pitch scene to review adult surface variants on CPU.
 
 Run inside Blender. No downloaded body assets are used. The scene must have been
-created by render_pitch.py with the baseline profile and the supplied motion.
+created by render_pitch.py with the baseline profile and matching rest rig.
+Use --replace-motion to apply another exact motion on that same rest rig.
 """
 
 import argparse
@@ -16,10 +17,16 @@ from mathutils import Matrix, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from meshlearning.binding import weights_for_vertices
+from meshlearning.blender_scene import replace_motion
 from meshlearning.body_shapes import PROFILES, shape_vertices
 from meshlearning.pitch import INDEX, NAMES
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--replace-motion", action="store_true")
+parser.add_argument("--profiles", default="slender,baseline,fuller")
+parser.add_argument("--views", default="front,side")
+parser.add_argument("--sample-frames", default="")
+parser.add_argument("--samples", type=int, default=4)
 parser.add_argument("--scene", required=True)
 parser.add_argument("--data", required=True)
 parser.add_argument("--out", required=True)
@@ -31,7 +38,7 @@ if args.step < 1:
 bpy.ops.wm.open_mainfile(filepath=str(Path(args.scene).resolve()))
 scene = bpy.context.scene
 scene.cycles.device = "CPU"
-scene.cycles.samples = 4
+scene.cycles.samples = args.samples
 scene.render.resolution_x = scene.render.resolution_y = args.size
 body = bpy.data.objects["Original continuous review mannequin"]
 rig = bpy.data.objects["Designed pitch rig - not an anatomical ISB skeleton"]
@@ -51,11 +58,31 @@ for v in body.data.vertices:
         )
 if not np.allclose(weights, actual_weights, atol=1e-6):
     raise ValueError("Template is not the matching baseline binding")
-frames = list(range(0, len(data["time_s"]), args.step))
+profiles = args.profiles.split(",")
+if any(profile not in PROFILES for profile in profiles):
+    raise ValueError("Unknown shape profile")
+views = args.views.split(",")
+if any(view not in ("front", "side", "rear") for view in views):
+    raise ValueError("Unknown camera")
+if args.replace_motion:
+    replace_motion(scene, rig, data)
+frames = (
+    [int(f) for f in args.sample_frames.split(",")]
+    if args.sample_frames
+    else list(range(0, len(data["time_s"]), args.step))
+)
+if len(set(frames)) != len(frames) or any(
+    f < 0 or f >= len(data["time_s"]) for f in frames
+):
+    raise ValueError("Unique valid source frames required")
 out = Path(args.out)
 out.mkdir(parents=True, exist_ok=True)
 report = {
     "scope": "original adult thickness variants; no age/BMI or clinical validation",
+    "motion_kind": str(data["motion_kind"]) if "motion_kind" in data else "pitch",
+    "source_animation_replaced": args.replace_motion,
+    "views": views,
+    "render_samples": args.samples,
     "motion_sha256": hashlib.sha256(Path(args.data).read_bytes()).hexdigest(),
     "template_sha256": hashlib.sha256(Path(args.scene).read_bytes()).hexdigest(),
     "source_frames": frames,
@@ -65,7 +92,7 @@ report = {
     "binding_weights_sha256": hashlib.sha256(actual_weights.tobytes()).hexdigest(),
     "profiles": {},
 }
-for profile in PROFILES:
+for profile in profiles:
     verts = shape_vertices(base, weights, p, r, profile)
     for v, point in zip(body.data.vertices, verts):
         v.co = point
@@ -75,7 +102,7 @@ for profile in PROFILES:
     folder = out / profile
     folder.mkdir(exist_ok=True)
     bpy.ops.wm.save_as_mainfile(filepath=str((folder / "review.blend").resolve()))
-    for view in ("front", "side"):
+    for view in views:
         scene.camera = bpy.data.objects["Review " + view]
         (folder / view).mkdir(exist_ok=True)
         for k, f in enumerate(frames):

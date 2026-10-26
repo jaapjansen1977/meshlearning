@@ -77,3 +77,13 @@ referentie heeft alleen NumPy nodig; de onafhankelijke verificatie gebruikt SciP
 conventie-kruiscontrole gelezen, zonder code of datasets over te nemen.
 Alle gepubliceerde controlelandmarks, rotaties en pitchlabels zijn gegenereerde
 modeldata. Dit is geen validatie van gemeten anatomie of SOMA-registratie.
+
+## Voetbaltrap v1
+
+De voetbalbeweging bestaat uit eigen numerieke sleutelstanden en interpolatie,
+met expliciete rechterheup-/knie-/enkelcontrols en een linker standvoet via IK. De
+bestaande eigen mesh, rig en oppervlaktevarianten worden hergebruikt. De bal
+is procedureel gemaakt, zonder textuur of extern model. Er is geen externe
+mocap, sportvideo, Kimodo-beweging of kledingasset gebruikt. De balbeweging
+is een illustratie, geen dynamische simulatie. Heup-/knie-/enkellabels blijven
+modelcontrols en zijn niet als ISB-gevalideerde anatomische hoeken aangeduid.

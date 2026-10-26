@@ -4,15 +4,24 @@ import argparse
 import json
 import shutil
 import subprocess
+from itertools import pairwise
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--phase-times", default="0,1.15,1.4,1.75,2.5")
 parser.add_argument("--renders", required=True, type=Path)
 parser.add_argument("--out", required=True, type=Path)
 args = parser.parse_args()
 report = json.loads((args.renders / "report.json").read_text())
+times = report["time_s"]
+if len(times) < 2 or any(
+    abs((b - a) - 1 / report["sample_fps"]) > 1e-8 for a, b in pairwise(times)
+):
+    raise ValueError(
+        "Video builder requires uniformly timed frames; isolated preview poses are not a video"
+    )
 args.out.mkdir(parents=True, exist_ok=True)
 fps_tag = f"{report['sample_fps']:g}fps"
 profiles = ("slender", "baseline", "fuller")
@@ -61,16 +70,32 @@ for view in ("front", "side"):
         check=True,
     )
     if view == "front":
-        frames[0].save(
+        gif_frames = [
+            frame.resize(
+                (
+                    min(960, frame.width),
+                    round(frame.height * min(960, frame.width) / frame.width),
+                )
+            ).quantize(colors=128, method=Image.Quantize.FASTOCTREE)
+            for frame in frames
+        ]
+        gif_frames[0].save(
             args.out / "comparison-front.gif",
             save_all=True,
-            append_images=frames[1:],
-            duration=round(4000 / report["sample_fps"]),
+            append_images=gif_frames[1:],
+            duration=[
+                10
+                * (
+                    round((i + 1) * 400 / report["sample_fps"])
+                    - round(i * 400 / report["sample_fps"])
+                )
+                for i in range(len(frames))
+            ],
             loop=0,
         )
     chosen = [
         min(range(len(frames)), key=lambda k: abs(report["time_s"][k] - t))
-        for t in (0, 1.15, 1.4, 1.75, 2.5)
+        for t in map(float, args.phase_times.split(","))
     ]
     sheet = Image.new("RGB", (size * 3, (size + 44) * len(chosen)))
     for row, k in enumerate(chosen):

@@ -1,0 +1,21 @@
+{
+  "version": "designed-football-kick-v1",
+  "frames": 577,
+  "source_fps": 240,
+  "motion_source": "original authored movement; no mocap or downloaded motion",
+  "nominal_contact_time_s": 1.2,
+  "max_angle_check_error_deg": 2.1316282072803006e-14,
+  "max_link_length_error_m": 1.1102230246251565e-16,
+  "max_support_ik_error_m": 0.0,
+  "max_support_ankle_drift_m": 1.1188630228279524e-16,
+  "minimum_kick_toe_height_m": 0.03172102175537028,
+  "ball_contact_marker_error_m": 2.7755575615628914e-17,
+  "label_scope": "Exact procedural controls; not validated ISB hip/knee/ankle angles",
+  "limitations": [
+    "No contact forces or dynamic balance solved",
+    "Ball departure is illustrative",
+    "No all-body self-collision guarantee",
+    "No measured performer or clinical validation"
+  ],
+  "passed": true
+}
