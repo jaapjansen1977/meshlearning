@@ -1,0 +1,13 @@
+{
+  "frames": 601,
+  "scope": "Virtual model landmarks versus functional design labels; no physical anatomical validation",
+  "max_abs_errors_deg": {
+    "R_alpha": 8.526512829121202e-14,
+    "R_beta": 6.039613253960852e-14,
+    "R_gamma": 2.0605739337042905e-13,
+    "L_alpha": 2.0605739337042905e-13,
+    "L_beta": 7.460698725481052e-14,
+    "L_gamma": 1.8651251213643076e-13
+  },
+  "passed": true
+}

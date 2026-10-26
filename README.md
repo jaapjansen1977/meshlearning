@@ -6,13 +6,19 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
-## Ontworpen pitch beoordelen
+## Pitch v2 beoordelen
 
 De eerste eigen ontworpen volledige baseball pitch heeft een aparte schouderketen,
 een aaneengesloten skinned mannequin, drie gesynchroniseerde aanzichten,
 vertraagde weergave, fasebeelden en functionele thorax-humeruslabels.
 
-**[Bekijk de pitch en de beoordelingshandleiding](docs/pitch/README.md).**
+**[Bekijk pitch v2 en de beoordelingshandleiding](docs/pitch-v2/README.md).**
+
+V2 begrenst de huidgewichten, houdt de onderarmschacht recht, vertraagt de
+rotatieovergang en toont de bewegende thoraxassen. De frame-aansluiting op
+ISB-georiënteerde modelassen en de bestaande Movalytics-interface is expliciet
+vastgelegd; echte SOMA-registraties ontbreken nog.
+[De oorspronkelijke V1-review blijft beschikbaar](docs/pitch/README.md).
 
 Dit is een tweede, afzonderlijke demonstratie naast het technische
 18-segmentenmodel hieronder. De pitchrig heeft 22 segmenten/controls,

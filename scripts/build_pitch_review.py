@@ -21,7 +21,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from meshlearning.pitch import INDEX, PHASES
+from meshlearning.pitch import INDEX
 
 p = argparse.ArgumentParser()
 p.add_argument("--motion", type=Path, required=True)
@@ -31,6 +31,7 @@ a = p.parse_args()
 a.out.mkdir(parents=True, exist_ok=True)
 metadata = json.loads((a.renders / "render_metadata.json").read_text())
 report = json.loads((a.motion / "report.json").read_text())
+PHASES = [(phase["time_s"], phase["name"]) for phase in report["phases"]]
 data = np.load(a.motion / "motion.npz", allow_pickle=False)
 with (a.motion / "angles.csv").open() as f:
     angles = list(csv.DictReader(f))
@@ -86,6 +87,31 @@ for k, row in enumerate(reference_frames):
     )
     for j, name in enumerate(views):
         frame = Image.open(a.renders / name / f"{k:04d}.png").convert("RGB")
+        axes_draw = ImageDraw.Draw(frame)
+        camera = metadata["views"][name]
+        projection = np.array(camera["projection_matrix"]) @ np.linalg.inv(
+            np.array(camera["world_from_camera"])
+        )
+
+        def project_axis(point, projection=projection):
+            clip = projection @ np.append(point, 1)
+            ndc = clip[:2] / clip[3]
+            return tuple(((ndc + 1) * [size / 2, -size / 2] + [0, size]).tolist())
+
+        origin = data["joint_positions_world"][f, INDEX["thorax"]] + data[
+            "global_rots"
+        ][f, INDEX["thorax"]] @ np.array([0, 0, 0.19])
+        for axis, color, label in [
+            (0, "#ff5555", "X rechts"),
+            (1, "#55ef88", "Y voor"),
+            (2, "#55aaff", "Z boven"),
+        ]:
+            start = project_axis(origin)
+            end = project_axis(
+                origin + 0.21 * data["global_rots"][f, INDEX["thorax"], :, axis]
+            )
+            axes_draw.line([start, end], fill=color, width=3)
+            axes_draw.text(end, label, font=small, fill=color)
         image.paste(frame, (j * size, 92))
         draw.text(
             (j * size + 12, 69),
@@ -199,7 +225,11 @@ for i, (time, label) in enumerate(PHASES):
         key=lambda f: abs(reference_frames[f]["source_time_s"] - time),
     )
     row = reference_frames[k]
-    im = Image.open(a.renders / "side" / f"{k:04d}.png").convert("RGB")
+    im = (
+        Image.open(combined / f"{k:04d}.png")
+        .convert("RGB")
+        .crop((size, 92, size * 2, 92 + size))
+    )
     card = annotate(
         im,
         [label, f"Bron t={row['source_time_s']:.3f} s / frame {row['source_frame']}"],
@@ -210,7 +240,7 @@ contact.save(a.out / "phase-contact-sheet.png")
 # Shoulder rig overlay: a schematic control chain, not anatomical bone outlines.
 k = min(
     range(len(reference_frames)),
-    key=lambda f: abs(reference_frames[f]["source_time_s"] - 1.1),
+    key=lambda f: abs(reference_frames[f]["source_time_s"] - PHASES[4][0]),
 )
 source = reference_frames[k]["source_frame"]
 rig_image = Image.new("RGB", (size * 3, size + 100), (20, 26, 34))
@@ -284,6 +314,43 @@ axes[-1].set_xlabel(
 fig.tight_layout()
 fig.savefig(a.out / "angle-curves.png", dpi=150)
 plt.close(fig)
+# Trunk signals are explicit authored controls, not clinical lumbar angles.
+if "thorax_yaw_world_control_deg" in angles[0]:
+    fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+    for key, label, color in [
+        ("pelvis_yaw_world_control_deg", "Bekken yaw", "#555555"),
+        ("thorax_yaw_world_control_deg", "Thorax yaw", "#1976b5"),
+    ]:
+        axes[0].plot(t, [float(row[key]) for row in angles], label=label, color=color)
+    axes[0].legend()
+    axes[0].set_ylabel("Yaw wereld (graden)")
+    axes[1].plot(
+        t,
+        [float(row["thorax_yaw_relative_pelvis_control_deg"]) for row in angles],
+        color="#1976b5",
+    )
+    axes[1].set_ylabel("Yaw-control verschil\nthorax - bekken (graden)")
+    axes[2].plot(
+        t,
+        [float(row["thorax_extension_control_deg"]) for row in angles],
+        label="Extensie + / flexie -",
+        color="#be4b24",
+    )
+    axes[2].axhline(0, color="gray", linewidth=0.7)
+    axes[2].legend()
+    axes[2].set_ylabel("Romp sagittaal (graden)")
+    for ax in axes:
+        ax.grid(alpha=0.25)
+        for time, _ in (PHASES[3], PHASES[4], PHASES[5]):
+            ax.axvline(time, color="gray", alpha=0.5, linewidth=0.8)
+    axes[0].set_title(
+        "Romp-bekken-coordinatie: ontwerpcontrols, geen klinische wervelkolomhoeken"
+    )
+    axes[-1].set_xlabel("Oorspronkelijke ontwerptijd (s)")
+    fig.tight_layout()
+    fig.savefig(a.out / "trunk-curves.png", dpi=150)
+    plt.close(fig)
+
 # Copy exact labels, definitions/config and numerical checks for review.
 for name in ("angles.csv", "report.json", "design.json"):
     (a.out / name).write_bytes((a.motion / name).read_bytes())
@@ -297,6 +364,17 @@ render_checks = {
     ),
     "mesh_vertices": metadata["mesh_vertices"],
     "skin_weight_sum_max_error": metadata["skin_weight_sum_max_error"],
+    "binding_profile": metadata.get("binding_profile", "legacy"),
+    "rigid_forearm_vertex_counts": metadata.get("rigid_forearm_vertex_counts", {}),
+    "max_surface_ownership_error_m": max(
+        (
+            value
+            for view in metadata["views"].values()
+            for row in view["frames"]
+            for value in row.get("surface_ownership_error_m", {}).values()
+        ),
+        default=0,
+    ),
     "review_source_frames": [r["source_frame"] for r in reference_frames],
     "review_original_times_s": [r["source_time_s"] for r in reference_frames],
     "all_views_synchronized": True,

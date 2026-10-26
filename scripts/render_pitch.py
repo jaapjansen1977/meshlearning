@@ -14,6 +14,7 @@ from bpy_extras.object_utils import world_to_camera_view
 from mathutils import Matrix, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from meshlearning.binding import weights_for_vertices
 from meshlearning.pitch import INDEX, NAMES, PARENTS, PHASES
 
 parser = argparse.ArgumentParser()
@@ -25,6 +26,12 @@ parser.add_argument("--size", type=int, default=512)
 parser.add_argument("--samples", type=int, default=8)
 args = parser.parse_args(sys.argv[sys.argv.index("--") + 1 :])
 data = np.load(args.data, allow_pickle=False)
+if "phase_times_s" in data:
+    PHASES = list(zip(data["phase_times_s"], data["phase_names"]))
+source_fps = int(data["source_fps"]) if "source_fps" in data else 240
+release_time = (
+    float(data["nominal_release_time_s"]) if "nominal_release_time_s" in data else 1.175
+)
 out = Path(args.out)
 out.mkdir(parents=True, exist_ok=True)
 selected = (
@@ -53,7 +60,7 @@ scene.render.resolution_x = args.size
 scene.render.resolution_y = args.size
 scene.render.resolution_percentage = 100
 scene.render.image_settings.file_format = "PNG"
-scene.render.fps = 240
+scene.render.fps = source_fps
 scene.frame_start = 1
 scene.frame_end = len(data["time_s"])
 scene.world.use_nodes = True
@@ -172,19 +179,9 @@ bpy.ops.object.modifier_apply(modifier=smooth.name)
 for m in (blue, skin, sleeve, stripe, dark):
     body.data.materials.append(m)
 verts = np.array([v.co[:] for v in body.data.vertices])
-# Segment-distance skin weights in the A-pose; the deltoid helper distributes twist.
-distances = []
-for j, name in enumerate(NAMES):
-    start = rest_p[j]
-    end = rest_e[j]
-    delta = end - start
-    u = np.clip(((verts - start) @ delta) / np.dot(delta, delta), 0, 1)
-    d = np.linalg.norm(verts - (start + u[:, None] * delta), axis=1)
-    distances.append(np.maximum(d - radii[j] * 0.45, 0))
-distances = np.array(distances).T
-nearest = np.argsort(distances, axis=1)[:, :4]
-raw = np.exp(-(np.take_along_axis(distances, nearest, axis=1) ** 2) / 0.065**2)
-weights = raw / raw.sum(axis=1, keepdims=True)
+# Region-constrained weights prevent shoulder bones pulling the chest and
+# keep the forearm shaft rigid, blending only near elbow and wrist.
+weights, binding_regions = weights_for_vertices(verts, rest_p, rest_r, rest_e, radii)
 
 bpy.ops.object.armature_add(enter_editmode=True, location=(0, 0, 0))
 rig = bpy.context.object
@@ -203,9 +200,10 @@ bpy.ops.object.mode_set(mode="OBJECT")
 rig.show_in_front = True
 for name in NAMES:
     body.vertex_groups.new(name=name)
-for vertex, (indices, amounts) in enumerate(zip(nearest, weights)):
-    for index, weight in zip(indices, amounts):
-        body.vertex_groups[int(index)].add([vertex], float(weight), "REPLACE")
+for vertex, amounts in enumerate(weights):
+    for index in np.flatnonzero(amounts > 1e-12):
+        body.vertex_groups[int(index)].add([vertex], float(amounts[index]), "REPLACE")
+
 armature = body.modifiers.new("Volume preserving shoulder deformation", "ARMATURE")
 armature.object = rig
 armature.use_deform_preserve_volume = True
@@ -281,7 +279,7 @@ for f in range(len(data["time_s"])):
     ball.location = Vector(data["endpoints_world"][f, hand]) + Matrix(
         data["global_rots"][f, hand].tolist()
     ) @ Vector((0, 0.025, 0.02))
-    ball.hide_render = bool(data["time_s"][f] > 1.175)
+    ball.hide_render = bool(data["time_s"][f] > release_time)
     ball.hide_viewport = ball.hide_render
     ball.keyframe_insert("location", frame=f + 1)
     ball.keyframe_insert("hide_render", frame=f + 1)
@@ -347,16 +345,21 @@ for name, loc in [
     camera.data.ortho_scale = 2.55
     cameras[name] = camera
 for time, label in PHASES:
-    scene.timeline_markers.new(label, frame=round(time * 240) + 1)
+    scene.timeline_markers.new(label, frame=round(time * source_fps) + 1)
 scene.camera = cameras["side"]
-scene.frame_set(265)
+scene.frame_set(round(PHASES[4][0] * source_fps) + 1)
 bpy.ops.wm.save_as_mainfile(filepath=str((out / "pitch_review.blend").resolve()))
 metadata = {
     "schema_version": 1,
     "model_status": "original procedural review mannequin; not anatomically validated",
-    "source_fps": 240,
+    "source_fps": source_fps,
     "views": {},
     "mesh_vertices": len(body.data.vertices),
+    "binding_profile": "region-constrained-v2",
+    "rigid_forearm_vertex_counts": {
+        side: int(np.sum(binding_regions == f"rigid_forearm_{side}"))
+        for side in ("R", "L")
+    },
     "skin_weight_sum_max_error": float(np.max(np.abs(weights.sum(axis=1) - 1))),
 }
 for name in args.views.split(","):
@@ -394,6 +397,33 @@ for name in args.views.split(","):
             )
         if max_bone_error > 1e-4:
             raise RuntimeError(f"Rig/export mismatch {max_bone_error} at frame {f}")
+        # Verify actual deformed surface vertices before subdivision, not only bones.
+        subdivision.show_viewport = False
+        bpy.context.view_layer.update()
+        evaluated = body.evaluated_get(bpy.context.evaluated_depsgraph_get())
+        evaluated_mesh = evaluated.to_mesh()
+        deformed = np.array([v.co[:] for v in evaluated_mesh.vertices])
+        evaluated.to_mesh_clear()
+        subdivision.show_viewport = True
+        surface_errors = {}
+        for region, segment in [
+            ("rigid_forearm_R", "forearm_R"),
+            ("rigid_forearm_L", "forearm_L"),
+            ("protected_torso", "thorax"),
+        ]:
+            j = INDEX[segment]
+            mask = (binding_regions == region) & (weights[:, j] > 0.999999)
+            if not np.any(mask):
+                raise RuntimeError(f"No verification vertices in {region}")
+            expected = (
+                data["global_rots"][f, j] @ rest_r[j].T @ (verts[mask] - rest_p[j]).T
+            ).T + data["joint_positions_world"][f, j]
+            surface_errors[region] = float(
+                np.max(np.linalg.norm(deformed[mask] - expected, axis=1))
+            )
+        if max(surface_errors.values()) > 1e-4:
+            raise RuntimeError(f"Surface ownership mismatch: {surface_errors}")
+        bpy.context.view_layer.update()
         phase = next(
             label
             for start, label in reversed(PHASES)
@@ -409,6 +439,7 @@ for name in args.views.split(","):
                 "phase": phase,
                 "joint_xy_px": points,
                 "max_rig_export_error": max_bone_error,
+                "surface_ownership_error_m": surface_errors,
             }
         )
     metadata["views"][name] = {

@@ -43,7 +43,7 @@ def main():
         "pitch", help="Generate an original designed full-body pitch"
     )
     pitch_parser.add_argument(
-        "--config", type=Path, default=Path("configs/pitch_v1.json")
+        "--config", type=Path, default=Path("configs/pitch_v2.json")
     )
     pitch_parser.add_argument("--out", type=Path, required=True)
     a = p.parse_args()

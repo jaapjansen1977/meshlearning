@@ -36,3 +36,13 @@ De reviewtools gebruiken Pillow en Matplotlib, met hun eigen licenties;
 er worden geen distributiebinaries of fontbestanden meegeleverd.
 Brondata en ontwerpkeuzes staan expliciet in de review. Het is geen gemeten
 beweging van een echte persoon en geen digitale kopie van een specifieke pitcher.
+
+## Pitch v2 en framecontract
+
+V2 gebruikt dezelfde originele procedurele geometrie met eigen regionale huidgewichten
+en aangepaste eigen keyframes. De vergelijking van huidbinding gebruikt identieke
+V1-bronposes. Virtuele anatomische landmarks zijn modelaannames, geen metingen.
+De Movalytics-audit leest de openbare interface en bewaart commit/hash/structuur;
+er is geen Babon-code of kalibratietabel gekopieerd of meegeleverd. De werkelijke
+registraties naar SOMA zijn expliciet onbekend; er zijn geen extra lichaamsassets
+of modelgewichten gedownload voor deze aansluiting.

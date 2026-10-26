@@ -1,0 +1,79 @@
+{
+  "status": "model landmark-frame algebra checked; actual SOMA registrations still missing",
+  "model_axes": [
+    "X subject right",
+    "Y anterior",
+    "Z superior"
+  ],
+  "landmark_proxy_axes": [
+    "X anterior",
+    "Y superior",
+    "Z subject right"
+  ],
+  "model_from_landmark_proxy_basis": [
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "landmark_status": "Virtual design landmarks, not measured/palpated anatomical landmarks",
+  "landmark_proxy_sequence": "Intrinsic Y-X-Y; branch beta negative on R, positive on L; undefined plane/axial at elevation 0/180",
+  "movalytics": {
+    "repository": "Babon-Innovations-b-v/movalytics",
+    "commit": "887de80c8966c1afcd35c5c685b8c59625bf6682",
+    "calibration": "soma_gemx_v14",
+    "calibration_sha256": "825453c18e70bc47671dfa9735c163f77caf5150b8f0e51c55aa9244769839b6",
+    "shoulder_pairs": [
+      [
+        "shoulder_R",
+        "Chest",
+        "RightArm"
+      ],
+      [
+        "shoulder_L",
+        "Chest",
+        "LeftArm"
+      ]
+    ],
+    "decomposition": "swing_twist plus per-DOF signs, weights and offsets; not direct YXY Euler output",
+    "runner_rest_policy": "Identity matrices; bind orientation absorbed in fitted axes per runner documentation",
+    "source_sha256": "f577a593f23214cf567d494650f957634b48ae17f147590ac1f7974dad377768",
+    "runner_sha256": "386382d25b1362b1a2fb8a9a5872538dfaa9bf61a95e19332d28337167218c08"
+  },
+  "registrations": {
+    "B_Chest": null,
+    "B_RightArm": null,
+    "B_LeftArm": null
+  },
+  "registration_meaning": "Columns of B_s express the SOMA segment axes in our model segment frame; determine from matched anatomical/static reference poses, verify on multiple non-collinear motions",
+  "mapping": "R_SOMA_s = G @ R_model_s @ B_s; R_SOMA_local = B_Chest.T @ R_model_HT @ B_Arm",
+  "rest_correction": "Movalytics R_motion = R_SOMA_local @ inverse(R_rest_local). For soma_gemx_v14 runner uses identity rest; do not substitute our A-pose rest matrices.",
+  "forbidden_shortcuts": [
+    "Do not rename humerus_R to RightArm and assume frames match",
+    "Do not use the model/ISB axis permutation as a guessed SOMA registration",
+    "Do not apply soma_gemx_v14 directly to unregistered procedural rotations",
+    "Do not describe functional or proxy YXY angles as already validated clinical Movalytics angles"
+  ],
+  "missing_for_actual_application": [
+    "Verified thorax-to-Chest and humerus-to-Arm frame registrations for the pinned SOMA version",
+    "Clinical review of virtual landmark placement, epicondylar axis and left/right conventions",
+    "Independent validation of combined shoulder motions and extreme positions"
+  ],
+  "checks": {
+    "shoulder_pairs_match": true,
+    "swing_twist_calibration_identified": true,
+    "identity_rest_runner_identified": true,
+    "unknown_registrations_left_explicitly_null": true
+  }
+}

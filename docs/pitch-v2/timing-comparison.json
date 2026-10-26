@@ -1,0 +1,21 @@
+{
+  "status": "Authored axial parameters, NOT measured anatomical angular velocities",
+  "versions": {
+    "v1": {
+      "start_s": 1.1,
+      "nominal_release_s": 1.175,
+      "transition_ms": 74.99999999999996,
+      "axial_control_change_deg": 195,
+      "mean_parameter_rate_deg_s": 2600.0000000000014,
+      "sampled_peak_parameter_rate_deg_s": 3841.3382696538233
+    },
+    "v2": {
+      "start_s": 1.15,
+      "nominal_release_s": 1.4,
+      "transition_ms": 250.0,
+      "axial_control_change_deg": 150,
+      "mean_parameter_rate_deg_s": 600.0,
+      "sampled_peak_parameter_rate_deg_s": 865.7333333333327
+    }
+  }
+}

@@ -308,6 +308,13 @@ def neutral_parameters():
     return d
 
 
+def phase_definitions(config):
+    labels = config.get("phase_labels", [label for _, label in PHASES])
+    if len(labels) != len(config["key_times_s"]):
+        raise ValueError("One phase label per key time required")
+    return list(zip(config["key_times_s"], labels))
+
+
 def generate(config_path, out):
     out = Path(out)
     if out.exists() and any(out.iterdir()):
@@ -315,6 +322,7 @@ def generate(config_path, out):
             "Output directory must be empty; preserve existing review results"
         )
     config = json.loads(Path(config_path).read_text())
+    phases = phase_definitions(config)
     fps = config["source_fps"]
     duration = config["key_times_s"][-1]
     if fps <= 0 or duration <= 0:
@@ -336,9 +344,36 @@ def generate(config_path, out):
         all_rots.append(r)
         all_ends.append(e)
         errors.append(list(leg_errors.values()))
-        phase = next(label for start, label in reversed(PHASES) if time >= start - 1e-8)
+        phase = next(label for start, label in reversed(phases) if time >= start - 1e-8)
         row = {"frame_idx": f, "time_s": float(time), "phase": phase}
+        row.update(
+            {
+                "thorax_yaw_world_control_deg": params["thorax_yaw"],
+                "pelvis_yaw_world_control_deg": params["pelvis_yaw"],
+                "thorax_yaw_relative_pelvis_control_deg": params["thorax_yaw"]
+                - params["pelvis_yaw"],
+                "thorax_extension_control_deg": params["trunk_lean"],
+                "thorax_lateral_control_deg": params["trunk_side"],
+            }
+        )
         for side in ("R", "L"):
+            from .frames import landmark_yxy, virtual_landmarks
+
+            lm = virtual_landmarks(
+                p[INDEX["thorax"]],
+                r[INDEX["thorax"]],
+                p[INDEX[f"humerus_{side}"]],
+                r[INDEX[f"humerus_{side}"]],
+                side,
+            )
+            yxy, valid_yxy = landmark_yxy(lm, side)
+            row.update(
+                {
+                    f"{side}_landmark_proxy_yxy_{axis}_deg": float(value)
+                    for axis, value in zip(("alpha", "beta", "gamma"), yxy)
+                }
+            )
+            row[f"{side}_landmark_proxy_valid"] = valid_yxy
             elevation, plane, axial, valid = functional_angles(
                 r[INDEX["thorax"]], r[INDEX[f"humerus_{side}"]], side
             )
@@ -362,6 +397,10 @@ def generate(config_path, out):
     out.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
         out / "motion.npz",
+        source_fps=np.array(fps),
+        phase_times_s=np.array([t for t, _ in phases]),
+        phase_names=np.array([name for _, name in phases]),
+        nominal_release_time_s=np.array(config["key_times_s"][5]),
         frame_idx=np.arange(len(times)),
         time_s=times,
         joint_names=np.array(NAMES),
@@ -396,7 +435,7 @@ def generate(config_path, out):
     )
     error = float(np.nanmax(np.abs(calculated - expected)))
     report = {
-        "version": VERSION,
+        "version": config.get("version", VERSION),
         "motion_source": "original authored numerical tracks; no recorded performer, mocap, copied animation or external mesh",
         "source_fps": fps,
         "duration_s": duration,
@@ -405,7 +444,7 @@ def generate(config_path, out):
         "render_source_fps": fps / config["render_stride"],
         "playback_fps": config["playback_fps"],
         "slowdown_factor": fps / config["render_stride"] / config["playback_fps"],
-        "phases": [{"time_s": t, "name": name} for t, name in PHASES],
+        "phases": [{"time_s": t, "name": name} for t, name in phases],
         "angle_definition": "R_HT = Rz(plane) @ Ry(-elevation) @ Rz(axial); L uses mirrored frame; positive axial internally directed",
         "angle_status": "functional engineering labels, NOT ISB validated; NOT Movalytics angles",
         "undefined_angles": "Plane/axial undefined when humerus is parallel to thorax Z; marked invalid/NaN",

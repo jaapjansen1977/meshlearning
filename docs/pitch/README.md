@@ -1,5 +1,10 @@
 # Ontworpen baseball pitch — eerste beoordeling
 
+**Dit is de historische V1-review. [Bekijk de aangepaste V2](../pitch-v2/README.md).**
+
+De oorspronkelijke V1-rendercode staat op commit `d81b713ae021d81286e90f6e43224ed7292540f7`.
+De huidige renderer gebruikt de nieuwe begrensde binding.
+
 **Een eigen ontworpen, rechtshandige sportieve worp. Geen bewegingsregistratie
 van een echte pitcher, geen anatomisch gevalideerde gouden standaard.**
 Deze versie is bedoeld om samen de beweging, schoudervorm en labels te beoordelen
