@@ -46,3 +46,17 @@ De Movalytics-audit leest de openbare interface en bewaart commit/hash/structuur
 er is geen Babon-code of kalibratietabel gekopieerd of meegeleverd. De werkelijke
 registraties naar SOMA zijn expliciet onbekend; er zijn geen extra lichaamsassets
 of modelgewichten gedownload voor deze aansluiting.
+
+## Exacte SOMA-/Movalytics-controle
+
+De officiële SOMA-template op commit 86632764684281dc98f31ab9c4aac36a4cdbc428
+is alleen buiten de checkout gedownload, met verificatie van de LFS-SHA256.
+De menselijke geometrie wordt niet in onze rendering gebruikt en het USD-bestand
+wordt niet gepubliceerd. De afgeleide frameconventie, bronhashes en aannames
+zijn expliciet vastgelegd. De ongewijzigde Movalytics-software en kalibratie zijn
+vanuit een afzonderlijke, vastgelegde checkout op CPU uitgevoerd; geen
+Babon-code of kalibratiebestand wordt meegeleverd. Numerieke onderzoeksresultaten
+verwijzen naar Kardolus et al., arXiv:2607.17639v1, en de oorspronkelijke repository.
+Deze controle verleent geen aanvullende rechten op derdencomponenten en bewijst
+geen klinische juistheid. De oorspronkelijke werkende kalibratie-invoer is een
+open verificatiepunt, niet stilzwijgend gerepareerd of opnieuw gefit.

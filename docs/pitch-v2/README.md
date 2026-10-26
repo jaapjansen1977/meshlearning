@@ -1,5 +1,7 @@
 # Pitch v2 — vervorming, timing en romp-armcoördinatie
 
+**Update: [exacte rotaties zijn nu met de echte SOMA-template onderzocht en door Movalytics gehaald](../exact-rotations/README.md). De oorspronkelijke V2-status hieronder blijft als historische context staan.**
+
 **[Vorige versie bekijken](../pitch/README.md)** ·
 **[Frame-aansluiting op ISB/Movalytics](FRAME_ALIGNMENT.md)**
 

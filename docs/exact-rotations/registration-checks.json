@@ -1,0 +1,9 @@
+{
+  "reference_cases": 6,
+  "world_variants": 2,
+  "sides": 2,
+  "finite_values_checked": 48,
+  "world_invariance_max_difference_deg": 7.105427357601002e-14,
+  "pose_inverse_registration_max_error": 9.992007221626409e-16,
+  "scope": "Matrix and software registration checks, not anatomical angle accuracy"
+}

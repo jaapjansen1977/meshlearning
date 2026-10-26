@@ -1,0 +1,28 @@
+{
+  "video_frames": 151,
+  "fps": 60,
+  "pitch_source_frames": 601,
+  "source_frame_mapping": "video i -> design 4*i; time i/60",
+  "outputs": {
+    "raw_R": {
+      "rows": 151,
+      "locked_frames": 0,
+      "finite_rows": 151
+    },
+    "filtered_6hz_R": {
+      "rows": 151,
+      "locked_frames": 0,
+      "finite_rows": 151
+    },
+    "raw_L": {
+      "rows": 151,
+      "locked_frames": 0,
+      "finite_rows": 151
+    },
+    "filtered_6hz_L": {
+      "rows": 151,
+      "locked_frames": 0,
+      "finite_rows": 151
+    }
+  }
+}

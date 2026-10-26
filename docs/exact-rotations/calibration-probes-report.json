@@ -1,0 +1,10 @@
+{
+  "status": "CPU calibration probes executed, no pitch or anatomical accuracy claim",
+  "movalytics_commit": "887de80c8966c1afcd35c5c685b8c59625bf6682",
+  "calibration_sha256": "825453c18e70bc47671dfa9735c163f77caf5150b8f0e51c55aa9244769839b6",
+  "rows": 42,
+  "max_probe_difference_deg": 7.105427357601002e-15,
+  "filter": "disabled to test exact matrix/calibration algebra",
+  "passed": true,
+  "pitch_executed": false
+}

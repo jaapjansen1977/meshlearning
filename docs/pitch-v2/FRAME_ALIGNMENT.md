@@ -1,5 +1,7 @@
 # Van modelassen naar ISB-georiënteerde frames en Movalytics
 
+**Historische V2-definitie. Zie [de uitgevoerde template-/Movalytics-controle](../exact-rotations/README.md) voor de nieuwere status en het nog te bevestigen invoercontract.**
+
 Er zijn nu expliciete frameconstructies en een gecontroleerd interfacecontract.
 Dat is een stap verder dan alleen een naam aan een ontwerpcontrol geven.
 **De anatomische plaatsing is nog niet gemeten en de daadwerkelijke

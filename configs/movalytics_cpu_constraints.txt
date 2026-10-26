@@ -1,0 +1,7 @@
+# Runtime used for the exact-rotation CPU review; no GEM-X/CUDA stack.
+numpy==2.3.5
+pandas==3.1.0
+scipy==1.18.1
+pyarrow==26.0.0
+matplotlib==3.10.8
+usd-core==25.11

@@ -1,0 +1,16 @@
+{
+  "status": "Application-reference angles from known rotations through unchanged Movalytics; no image estimation",
+  "input_sampling": "single-view original-time video frames",
+  "application_reference_policy": "Compare future predicted rotations through the same unchanged calibration and sampling/filter policy; this measures application-convention estimation error, not clinical validity",
+  "movalytics_commit": "887de80c8966c1afcd35c5c685b8c59625bf6682",
+  "calibration_sha256": "825453c18e70bc47671dfa9735c163f77caf5150b8f0e51c55aa9244769839b6",
+  "rig_sha256": "79f02176534ebc0671c76bf09203bbee8e1621f8b6d34cc63aec69b73460bba2",
+  "frames": 151,
+  "fps": 60.0,
+  "inverse_registration_max_matrix_error": 1.1102230246251565e-15,
+  "comparison_policy": "YXY plane/elevation/axial and Movalytics flex/abd/rotation are distinct representations; do not report their direct differences as estimator MAE",
+  "registration_status": "template-matched convention; not measured epicondylar/anatomical registration",
+  "video_inference_executed": false,
+  "training_reference_ready": false,
+  "pending_confirmation": "Registration twist reference and calibration/runtime input semantics must be confirmed before treating these values as training reference"
+}

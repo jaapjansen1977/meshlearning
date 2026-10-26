@@ -1,0 +1,11 @@
+{
+  "status": "Reproduced input-route difference; actual historical calibration data not established",
+  "movalytics_commit": "887de80c8966c1afcd35c5c685b8c59625bf6682",
+  "common_world_rotation_deg": 60,
+  "expected_relative_shoulder_change_deg": 0,
+  "bundle_adapter_matrix_change_deg": 60.00000000000001,
+  "runtime_relative_matrix_change_deg": 0.0,
+  "adapter_keeps_absolute_child_rotation": true,
+  "runtime_keeps_parent_relative_rotation": true,
+  "pending_confirmation": "Which representation actually fed soma_gemx_v14 and the working application?"
+}

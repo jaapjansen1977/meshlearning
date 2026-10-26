@@ -6,6 +6,15 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
+## Exacte rotaties door Movalytics
+
+**[Bekijk de uitgevoerde CPU-controle en geschikte invoerfilmpjes](docs/exact-rotations/README.md).**
+De echte SOMA-templateframes zijn gelezen en de pitchrotaties zijn met een
+expliciete template-registratie door de ongewijzigde Movalytics-kalibratie gehaald.
+Er is nog geen GEM-X-beeldschatting uitgevoerd. De controles tonen een verschil
+tussen de meegeleverde bundel- en runtime-invoerroute; de herkomst van de
+kalibratie-invoer moet nog met Babon worden bevestigd vóór traininglabels worden vastgesteld.
+
 ## Pitch v2 beoordelen
 
 De eerste eigen ontworpen volledige baseball pitch heeft een aparte schouderketen,
@@ -17,7 +26,7 @@ vertraagde weergave, fasebeelden en functionele thorax-humeruslabels.
 V2 begrenst de huidgewichten, houdt de onderarmschacht recht, vertraagt de
 rotatieovergang en toont de bewegende thoraxassen. De frame-aansluiting op
 ISB-georiënteerde modelassen en de bestaande Movalytics-interface is expliciet
-vastgelegd; echte SOMA-registraties ontbreken nog.
+vastgelegd; de template-registratie is inmiddels onderzocht; het werkende Babon-invoercontract moet nog worden bevestigd.
 [De oorspronkelijke V1-review blijft beschikbaar](docs/pitch/README.md).
 
 Dit is een tweede, afzonderlijke demonstratie naast het technische
