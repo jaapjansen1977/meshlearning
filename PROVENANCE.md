@@ -60,3 +60,10 @@ verwijzen naar Kardolus et al., arXiv:2607.17639v1, en de oorspronkelijke reposi
 Deze controle verleent geen aanvullende rechten op derdencomponenten en bewijst
 geen klinische juistheid. De oorspronkelijke werkende kalibratie-invoer is een
 open verificatiepunt, niet stilzwijgend gerepareerd of opnieuw gefit.
+
+## Volwassen lichaamsvormen
+
+De slanke en vollere variant zijn eigen parametrische vervormingen van onze
+oorspronkelijke procedurele mesh. Geen externe lichaamsmodellen, demografische
+scans, texturen of nieuwe afhankelijkheden zijn toegevoegd. Het zijn geen
+gevalideerde leeftijds- of BMI-modellen; het skelet en de pitch blijven gelijk.

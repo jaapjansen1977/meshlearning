@@ -4,6 +4,7 @@ No external avatar, texture, motion file, add-on or human model is loaded.
 """
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -15,9 +16,11 @@ from mathutils import Matrix, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from meshlearning.binding import weights_for_vertices
+from meshlearning.body_shapes import PROFILES, shape_vertices
 from meshlearning.pitch import INDEX, NAMES, PARENTS, PHASES
 
 parser = argparse.ArgumentParser()
+parser.add_argument("--body-shape", choices=PROFILES, default="baseline")
 parser.add_argument("--data", required=True)
 parser.add_argument("--out", required=True)
 parser.add_argument("--views", default="front,side,rear")
@@ -182,6 +185,11 @@ verts = np.array([v.co[:] for v in body.data.vertices])
 # Region-constrained weights prevent shoulder bones pulling the chest and
 # keep the forearm shaft rigid, blending only near elbow and wrist.
 weights, binding_regions = weights_for_vertices(verts, rest_p, rest_r, rest_e, radii)
+# Bind the baseline topology first: thickness must not change surface ownership.
+verts = shape_vertices(verts, weights, rest_p, rest_r, args.body_shape)
+for vertex, point in zip(body.data.vertices, verts):
+    vertex.co = point
+body.data.update()
 
 bpy.ops.object.armature_add(enter_editmode=True, location=(0, 0, 0))
 rig = bpy.context.object
@@ -351,6 +359,12 @@ scene.frame_set(round(PHASES[4][0] * source_fps) + 1)
 bpy.ops.wm.save_as_mainfile(filepath=str((out / "pitch_review.blend").resolve()))
 metadata = {
     "schema_version": 1,
+    "body_shape": args.body_shape,
+    "body_shape_parameters": PROFILES[args.body_shape],
+    "body_shape_scope": "adult surface thickness only; unchanged skeleton and motion",
+    "motion_sha256": hashlib.sha256(Path(args.data).read_bytes()).hexdigest(),
+    "rest_surface_sha256": hashlib.sha256(verts.tobytes()).hexdigest(),
+    "binding_weights_sha256": hashlib.sha256(weights.tobytes()).hexdigest(),
     "model_status": "original procedural review mannequin; not anatomically validated",
     "source_fps": source_fps,
     "views": {},

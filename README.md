@@ -6,6 +6,12 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
+## Lichaamsvormen vergelijken
+
+**[Bekijk dezelfde worp met een slanke, basis- en vollere mesh](docs/body-shapes/README.md).**
+Drie volwassen oppervlaktevarianten, identiek skelet en beweging, met vergelijkingen
+van voren en van opzij. Dit zijn nog geen leeftijds- of BMI-modellen.
+
 ## Exacte rotaties door Movalytics
 
 **[Bekijk de uitgevoerde CPU-controle en geschikte invoerfilmpjes](docs/exact-rotations/README.md).**
