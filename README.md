@@ -6,6 +6,14 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
+## Diagnose van de schouderkalibratie
+
+**[Bekijk de aangetoonde bereikbegrenzing en de afzonderlijke framekwestie](docs/shoulder-diagnosis/README.md).**
+De publieke kalibratie beperkt het ruwe abductie-/adductiekanaal tot circa
+−150,4° tot +49,8°, onafhankelijk van onze meshregistratie. De ontledingsalgebra
+is onafhankelijk gecontroleerd op 10.000 rotaties. Dit is nog geen volledige
+reproductie van de werkende Babon-applicatie.
+
 ## Bekende schouderheffing controleren
 
 **[Bekijk de uitgevoerde 0–160°-controle](docs/shoulder-elevation/README.md).**

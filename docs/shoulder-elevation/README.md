@@ -1,5 +1,7 @@
 # Controle: bekende schouderheffing van 0 tot 160 graden
 
+**Vervolg: [de diagnose scheidt de bewezen kalibratiebegrenzing van de voorlopige frame-aansluiting](../shoulder-diagnosis/README.md).**
+
 **Uitgevoerd zonder GEM-X, zonder filtering en zonder wijziging van de kalibratie.**
 De proef levert grote afwijkingen en kanaalvermenging op binnen onze huidige
 SOMA-templateaansluiting. Hij reproduceert niet exact de gemelde 160° → 53° en
