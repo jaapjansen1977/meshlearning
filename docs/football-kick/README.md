@@ -1,5 +1,8 @@
 # Een voetbaltrap met drie lichaamsvormen
 
+**Nieuw: [de exacte beenrotaties zijn rechtstreeks door Movalytics gehaald](../football-movalytics/README.md).
+Bekijk daar de knie-, heup- en enkeluitkomsten; GEM-X is nog niet uitgevoerd.**
+
 **Een nieuwe eigen beweging:** een rechtervoettrap vanuit stand, met een vaste
 linker standvoet, achterzwaai, knie-extensie, romp-/armcoördinatie en doorzwaai.
 Dezelfde beweging is weergegeven met onze slanke, basis- en vollere mesh.
