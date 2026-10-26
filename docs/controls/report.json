@@ -1,0 +1,19 @@
+{
+  "definition_version": "engineering-axes-v2",
+  "definition_sha256": "8d078d7ea9ed2881607c06dd0bf7b6fb72c47fa5e9cac94eb3db92fda550346d",
+  "segments": 18,
+  "channels": 54,
+  "checks": 1782,
+  "passed": 1782,
+  "failed": 0,
+  "max_abs_error_deg": 2.842170943040401e-14,
+  "max_off_axis_matrix_residual": 8.326672684688674e-16,
+  "max_passive_joint_matrix_residual": 8.881784197001252e-16,
+  "scope": "algebraic isolated-axis checks; no anatomical accuracy claim",
+  "movalytics_status": "not executed; this procedural skeleton is not calibrated SOMA",
+  "gemx_status": "not executed; no image estimation measured",
+  "tolerances": {
+    "angle_deg": 1e-08,
+    "matrix_absolute": 1e-08
+  }
+}
