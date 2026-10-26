@@ -6,6 +6,13 @@ Gebaseerd op het werkprincipe van Lavikainen et al. (2025),
 https://doi.org/10.1038/s41597-025-06243-7, zonder hun dataset, meshes,
 texturen of code over te nemen.
 
+## Bekende schouderheffing controleren
+
+**[Bekijk de uitgevoerde 0–160°-controle](docs/shoulder-elevation/README.md).**
+Exacte geometrische abductie en anteflexie door de ongewijzigde Movalytics-runtime,
+zonder GEM-X, met een afzonderlijke rustconventiecontrole. De klinische
+frame-registratie blijft voorlopig; dit is nog geen bewijs van één kalibratiefactor.
+
 ## Lichaamsvormen vergelijken
 
 **[Bekijk dezelfde worp met een slanke, basis- en vollere mesh](docs/body-shapes/README.md).**
