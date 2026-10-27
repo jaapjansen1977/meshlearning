@@ -87,3 +87,15 @@ is procedureel gemaakt, zonder textuur of extern model. Er is geen externe
 mocap, sportvideo, Kimodo-beweging of kledingasset gebruikt. De balbeweging
 is een illustratie, geen dynamische simulatie. Heup-/knie-/enkellabels blijven
 modelcontrols en zijn niet als ISB-gevalideerde anatomische hoeken aangeduid.
+
+## Tilbewegingen met variabele heup-/ruginzet
+
+`meshlearning/lifting.py` en `scripts/render_lifting.py` maken een afzonderlijke,
+originele sagittale tilrig en procedurele oppervlakken: bekken, vijf buiglinks,
+bovenromp, ledematen, doos en verhoging. Vier bewegingen zijn ontworpen vanuit
+numerieke segmentstanden en handdoelen, zonder externe animatie, mocap, menselijke
+mesh of textuur. De reviewlabels zijn exact berekende modelhoeken; er is geen
+anatomische ISB-validatie en geen GEM-X- of Movalytics-inferentie uitgevoerd voor
+deze tilreeks. De vijf links zijn geen gevalideerde afzonderlijke lendenwervels.
+De reviewtools gebruiken dezelfde bestaande NumPy-/Blender-/Pillow-/Matplotlib-/
+ffmpeg-omgeving als de eerdere eigen demonstraties.

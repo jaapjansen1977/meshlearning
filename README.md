@@ -12,6 +12,10 @@ texturen of code over te nemen.
 De rechterknie volgt in deze proef redelijk; heupnulstand en vooral enkelrust
 vragen nog verificatie. Dit is een CPU-controle zonder GEM-X, met ongewijzigde kalibratie.
 
+## Tilbewegingen met verschillende heup-/rugstrategieën
+
+**[Vergelijk vier tilvarianten](docs/lifting/README.md).** Heupdominant, gemengde stoop, rugdominant en squat, met een afzonderlijk vijf-links lage-rugmodel, gesynchroniseerde filmpjes en expliciete modelhoekdefinities.
+
 ## Nieuwe beweging: voetbaltrap
 
 **[Bekijk de voetbaltrap met drie lichaamsvormen](docs/football-kick/README.md).**

@@ -53,7 +53,16 @@ def main():
         "--config", type=Path, default=Path("configs/football_kick_v1.json")
     )
     football_parser.add_argument("--out", type=Path, required=True)
+    lifting_parser = sub.add_parser(
+        "lifting", help="Generate four original hip/lumbar lifting strategies"
+    )
+    lifting_parser.add_argument("--out", type=Path, required=True)
     a = p.parse_args()
+    if a.command == "lifting":
+        from .lifting import generate as generate_lifting
+
+        print(json.dumps(generate_lifting(a.out), indent=2))
+        return
     if a.command == "football-kick":
         from .football import generate as generate_football
 

@@ -1,0 +1,78 @@
+{
+  "hip_hinge": {
+    "label": "Heupdominant",
+    "max_angle_error_deg": 1.687538997430238e-14,
+    "max_link_length_change_m": 3.885780586188048e-16,
+    "bottom": {
+      "time_s": 1.8,
+      "pelvis_anterior_tilt_deg": 65.0,
+      "expected_hip_flexion_deg": 85.0,
+      "hip_flexion_deg": 85.0,
+      "expected_knee_flexion_deg": 25.0,
+      "knee_flexion_deg": 24.999999999999996,
+      "expected_lumbar_flexion_deg": 5.0,
+      "lumbar_flexion_deg": 4.999999999999994,
+      "thorax_forward_tilt_deg": 70.0,
+      "handle_height_m": 0.65,
+      "box_handle_height_m": 0.65,
+      "box_held": 1
+    }
+  },
+  "mixed_stoop": {
+    "label": "Gemengde stoop",
+    "max_angle_error_deg": 2.1316282072803006e-14,
+    "max_link_length_change_m": 3.885780586188048e-16,
+    "bottom": {
+      "time_s": 1.8,
+      "pelvis_anterior_tilt_deg": 40.0,
+      "expected_hip_flexion_deg": 65.0,
+      "hip_flexion_deg": 65.0,
+      "expected_knee_flexion_deg": 33.0,
+      "knee_flexion_deg": 33.0,
+      "expected_lumbar_flexion_deg": 30.0,
+      "lumbar_flexion_deg": 29.999999999999996,
+      "thorax_forward_tilt_deg": 70.0,
+      "handle_height_m": 0.65,
+      "box_handle_height_m": 0.65,
+      "box_held": 1
+    }
+  },
+  "lumbar_dominant": {
+    "label": "Rugdominant",
+    "max_angle_error_deg": 2.1316282072803006e-14,
+    "max_link_length_change_m": 3.885780586188048e-16,
+    "bottom": {
+      "time_s": 1.8,
+      "pelvis_anterior_tilt_deg": -8.0,
+      "expected_hip_flexion_deg": 37.0,
+      "hip_flexion_deg": 36.99999999999999,
+      "expected_knee_flexion_deg": 65.0,
+      "knee_flexion_deg": 64.99999999999999,
+      "expected_lumbar_flexion_deg": 60.0,
+      "lumbar_flexion_deg": 59.99999999999999,
+      "thorax_forward_tilt_deg": 52.0,
+      "handle_height_m": 0.65,
+      "box_handle_height_m": 0.65,
+      "box_held": 1
+    }
+  },
+  "squat": {
+    "label": "Squat",
+    "max_angle_error_deg": 1.4210854715202004e-14,
+    "max_link_length_change_m": 3.3306690738754696e-16,
+    "bottom": {
+      "time_s": 1.8,
+      "pelvis_anterior_tilt_deg": 15.0,
+      "expected_hip_flexion_deg": 80.0,
+      "hip_flexion_deg": 80.0,
+      "expected_knee_flexion_deg": 95.0,
+      "knee_flexion_deg": 95.0,
+      "expected_lumbar_flexion_deg": 10.0,
+      "lumbar_flexion_deg": 10.000000000000004,
+      "thorax_forward_tilt_deg": 25.0,
+      "handle_height_m": 0.65,
+      "box_handle_height_m": 0.65,
+      "box_held": 1
+    }
+  }
+}
